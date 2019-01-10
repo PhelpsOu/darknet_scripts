@@ -1,33 +1,31 @@
 # darknet_scripts
 This repo contains my auxilary scripts to work with darknet deep learning famework
-1. [How to reproduce YOLOv2 anchors for yolo-voc.cfg?](#how-to-reproduce-yolov2-anchors-for-yolo-voccfg)
+1. [How to compute/reproduce YOLOv2 anchors for yolo-voc.cfg?](#how-to-reproduce-yolov2-anchors-for-yolo-voccfg)
 2. [How to visualize genereted anchors?](#how-to-visualize-genereted-anchors)
 3. [Is gen_anchors.py same as YOLOv2 anchor computation?](#is-gen_anchorspy-same-as-yolov2-anchor-computation)
 4. [How to get anchors if My input for network is bigger than 416?](#how-to-get-anchors-if-my-input-for-network-is-bigger-than-416)
 5. [How to plot YOLO loss](#how-to-plot-yolo-loss)
 6. [YOLO and Anchors tutorial](http://christopher5106.github.io/object/detectors/2017/08/10/bounding-box-object-detectors-understanding-yolo.html) 
 
-### How to reproduce YOLOv2 anchors for yolo-voc.cfg?
+### How to compute/reproduce YOLOv2 anchors for yolo-voc.cfg?
 
-2. Download The Pascal VOC Data and unpack it to directory `build\darknet\x64\data\voc` will be created dir `build\darknet\x64\data\voc\VOCdevkit\`:
+1. Download The Pascal VOC Data and unpack it to directory `build\darknet\x64\data\voc` will be created dir `build\darknet\x64\data\voc\VOCdevkit\`:
     * http://pjreddie.com/media/files/VOCtrainval_11-May-2012.tar
     * http://pjreddie.com/media/files/VOCtrainval_06-Nov-2007.tar
     * http://pjreddie.com/media/files/VOCtest_06-Nov-2007.tar
     
-    2.1 Download file `voc_label.py` to dir `build\darknet\x64\data\voc`: http://pjreddie.com/media/files/voc_label.py
+    1.1 Download file `voc_label.py` to dir `build\darknet\x64\data\voc`: http://pjreddie.com/media/files/voc_label.py
 
-3. Download and install Python for Windows: https://www.python.org/ftp/python/3.5.2/python-3.5.2-amd64.exe
+2. Download and install Python for Windows: https://www.python.org/ftp/python/2.7.9/python-2.7.9rc1.amd64.msi
 
-4. Run command: `python build\darknet\x64\data\voc\voc_label.py` (to generate files: 2007_test.txt, 2007_train.txt, 2007_val.txt, 2012_train.txt, 2012_val.txt)
+3. Run command: `python build\darknet\x64\data\voc\voc_label.py` (to generate files: 2007_test.txt, 2007_train.txt, 2007_val.txt, 2012_train.txt, 2012_val.txt)
 
-5. Run command: `type 2007_train.txt 2007_val.txt 2012_*.txt > train.txt`
+4. Run command: `type 2007_train.txt 2007_val.txt 2012_*.txt > train.txt`
 
-Next, call <br/> 
+5. Obtain anchors5.txt in generated_anchors/voc-reproduce folder by executing:
 ```cmd
 python gen_anchors.py -filelist //path//to//voc//filelist/list//train.txt -output_dir generated_anchors/voc-reproduce -num_clusters 5
 ```
-<br />
-You will have anchors5.txt in generated_anchors/voc-reproduce folder. <br />
 
 ### How to visualize genereted anchors?
 After completing the steps above, execute <br />
@@ -73,9 +71,7 @@ For example,below command will save the log into log/aggregate-voc-tiny7.log <br
 ```cmd
 darknet.exe detector train data/aggregate-voc-tiny7.data cfg/aggregate-voc-tiny7.cfg  backup/aggregate-voc-tiny7/aggregate-voc-tiny7_21000.weights >> log/aggregate-voc-tiny7.log -gpus 0,1
 ```
-<br />
-<br />
-Next, to plot the loss, execute <br />
-```
+Once you have \\path\\to\\log\\aggregate-voc-tiny7.log, plot the loss by executing 
+```cmd
 python plot_yolo_log.py \\path\\to\\log\\aggregate-voc-tiny7.log
 ```
